@@ -46,14 +46,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/komentar/keluar', [KomentarController::class, 'keluar'])->name('komentar.keluar');
     Route::get('/komentar/rapbdess', [KomentarController::class, 'rapbdess'])->name('komentar.rapbdess');
 
-    
+
     Route::get('/pemasukan', [PemasukanController::class, 'index'])->name('pemasukan.index');
     Route::get('/pemasukan/create', [PemasukanController::class, 'create'])->name('pemasukan.create');
     Route::post('/pemasukan', [PemasukanController::class, 'store'])->name('pemasukan.store');
     Route::get('/pemasukan/{id}/edit', [PemasukanController::class, 'edit'])->name('pemasukan.edit');
     Route::put('/pemasukan/{id}', [PemasukanController::class, 'update'])->name('pemasukan.update');
     Route::delete('/pemasukan/{id}', [PemasukanController::class, 'destroy'])->name('pemasukan.destroy');
-    
+
     Route::get('/pengeluaran', [PengeluaranController::class, 'index'])->name('pengeluaran.index');
     Route::get('/pengeluaran/create', [PengeluaranController::class, 'create'])->name('pengeluaran.create');
     Route::post('/pengeluaran', [PengeluaranController::class, 'store'])->name('pengeluaran.store');
@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/anggaran/{id}', [AnggaranController::class, 'destroy'])->name('anggaran.destroy');
     Route::post('/anggaran/update-realisasi/{id}', [AnggaranController::class, 'updateRealisasi']);
     Route::get('/filter-statistik/{tahun}', [AnggaranController::class, 'filterStatistik']);  // Menyederhanakan rute
-    Route::get('/download-pdf', [LaporanController::class, 'downloadPDF'])->name('download.pdf');
+    Route::get('/download-pdf/{tahun?}', [LaporanController::class, 'downloadPDF'])->name('download.pdf');
     Route::get('/rekap/data', [LaporanController::class, 'getData'])->name('rekap.data');
 
 
@@ -77,4 +77,4 @@ Route::middleware('auth')->group(function () {
 
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

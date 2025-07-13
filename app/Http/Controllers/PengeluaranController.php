@@ -12,11 +12,29 @@ class PengeluaranController extends Controller
         $pengeluaran = Pengeluaran::all();
         return view('pengeluaran.index', compact('pengeluaran'));
     }
-    public function view()
+    public function view(Request $request)
 {
-    $pengeluaran = Pengeluaran::all();
-    return view('pengeluaran_view', compact('pengeluaran'));
+    // Ambil bulan dan tahun dari query string, default ke sekarang
+    $bulan = $request->input('bulan', now()->format('m'));
+    $tahun = $request->input('tahun', now()->format('Y'));
+
+    // Ambil data pengeluaran berdasarkan bulan dan tahun
+    $pengeluaran = Pengeluaran::whereMonth('tanggal', $bulan)
+        ->whereYear('tanggal', $tahun)
+        ->get();
+
+    // Daftar kategori tetap
+    $kategori = ['APBN', 'APBD', 'Dana Desa', 'Swadaya'];
+
+    // Siapkan data chart berdasarkan kategori
+    $chartData = [];
+    foreach ($kategori as $k) {
+        $chartData[$k] = $pengeluaran->where('sumber_dana', $k)->sum('jumlah');
+    }
+
+    return view('pengeluaran_view', compact('pengeluaran', 'chartData', 'bulan', 'tahun'));
 }
+
 
     public function create()
     {

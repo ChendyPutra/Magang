@@ -14,11 +14,28 @@ class PemasukanController extends Controller
         return view('pemasukan.index', compact('pemasukan'));
     }
    
-    public function showForUser()
+    public function showForUser(Request $request)
 {
-    $pemasukan = Pemasukan::all();
-    return view('welcome', compact('pemasukan'));
+    $bulan = $request->input('bulan', date('m')); // default: bulan sekarang
+    $tahun = $request->input('tahun', date('Y')); // default: tahun sekarang
+
+    // Ambil data pemasukan sesuai bulan dan tahun
+    $pemasukan = Pemasukan::whereMonth('tanggal', $bulan)
+        ->whereYear('tanggal', $tahun)
+        ->get();
+
+    // Kategori tetap
+    $kategoriTetap = ['APBN', 'APBD', 'Dana Desa', 'Swadaya'];
+
+    // Hitung total per kategori untuk chart
+    $chartData = [];
+    foreach ($kategoriTetap as $kategori) {
+        $chartData[$kategori] = $pemasukan->where('sumber_dana', $kategori)->sum('jumlah');
+    }
+
+    return view('welcome', compact('pemasukan', 'bulan', 'tahun', 'chartData'));
 }
+
 
 
 
